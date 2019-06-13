@@ -3,7 +3,7 @@
     <title>Monospace</title>
     <link href="https://devnoff.github.io/feed.xml" rel="self" />
     <link href="https://devnoff.github.io" />
-    <updated>2019-06-13T15:01:16+09:00</updated>
+    <updated>2019-06-13T15:09:26+09:00</updated>
     <author>
         <name>devnoff</name>
     </author>
@@ -14,10 +14,10 @@
         <author>
             <name>devnoff</name>
         </author>
-        <link href="https://devnoff.github.io/spa-jadong-baepo-git-jenkins-aws.html"/>
-        <id>https://devnoff.github.io/spa-jadong-baepo-git-jenkins-aws.html</id>
+        <link href="https://devnoff.github.io/spa-auto-deployment-git-jenkins-aws.html"/>
+        <id>https://devnoff.github.io/spa-auto-deployment-git-jenkins-aws.html</id>
 
-        <updated>2019-06-13T15:00:41+09:00</updated>
+        <updated>2019-06-13T15:08:42+09:00</updated>
             <summary>
                 <![CDATA[
                     Git + Jenkins + Docker + S3 + CloudFront 를 이용해 간단한&hellip;
