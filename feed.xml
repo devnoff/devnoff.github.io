@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Monospace</title>
+    <link href="/feed.xml" rel="self" />
+    <link href="" />
+    <updated>2019-06-13T14:38:25+09:00</updated>
+    <author>
+        <name>devnoff</name>
+    </author>
+    <id></id>
+
+    <entry>
+        <title>Hi</title>
+        <author>
+            <name>devnoff</name>
+        </author>
+        <link href="/hi.html"/>
+        <id>/hi.html</id>
+
+        <updated>2019-06-13T14:22:45+09:00</updated>
+            <summary>
+                <![CDATA[
+                    Halo~~
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                Halo~~
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Test Post</title>
+        <author>
+            <name>devnoff</name>
+        </author>
+        <link href="/test-post.html"/>
+        <id>/test-post.html</id>
+
+        <updated>2019-06-13T14:22:28+09:00</updated>
+            <summary>
+                <![CDATA[
+                    Hello World!
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                Hello World!
+            ]]>
+        </content>
+    </entry>
+</feed>
