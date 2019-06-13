@@ -1,0 +1,628 @@
+<!doctype html><html amp lang="en-us"><head><meta charset="utf-8"><title>SPA 자동 배포 (Git + Jenkins + AWS) - Monospace</title><meta name="description" content="Git + Jenkins + Docker + S3 + CloudFront 를 이용해 간단한&hellip;"><link rel="canonical" href="https://devnoff.github.io/spa-jadong-baepo-git-jenkins-aws.html"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"><link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css"><script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script><script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script><script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script><script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://devnoff.github.io/amp/spa-jadong-baepo-git-jenkins-aws.html"},"headline":"SPA 자동 배포 (Git + Jenkins + AWS)","datePublished":"2019-06-13T15:00","dateModified":"2019-06-13T15:00","description":"Git + Jenkins + Docker + S3 + CloudFront 를 이용해 간단한&hellip;","author":{"@type":"Person","name":"devnoff"},"publisher":{"@type":"Organization","name":"devnoff"}}</script><style amp-custom>article,
+aside,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block; }
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  margin: 0;
+  padding: 0; }
+
+li {
+  list-style: none; }
+
+amp-img {
+  max-width: 100%; }
+
+button,
+input,
+select,
+textarea {
+  font: inherit; }
+
+html {
+  font-size: 1rem; }
+
+body {
+  background: #f1f1f1;
+  color: #262626;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  line-height: 1.6; }
+
+a {
+  color:  #039be5;
+  text-decoration: none;
+  -webkit-transition: all 0.12s linear 0s;
+  -o-transition: all 0.12s linear 0s;
+  transition: all 0.12s linear 0s; }
+
+a:hover {
+  color: #262626;
+  text-decoration: underline;
+  -webkit-text-decoration-skip: ink;
+  text-decoration-skip: ink; }
+
+a:active {
+  color: #262626; }
+
+a:focus {
+  outline: 2px dotted #039be5; }
+
+figure,
+blockquote,
+p,
+ul,
+ol,
+dl,
+table,
+hr,
+fieldset {
+  margin-top: 1.6rem; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #262626;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-top: 2.13333rem; }
+
+h1 {
+  font-size: 1.67583rem;
+  font-weight: normal; }
+
+h2 {
+  font-size: 1.4729rem; }
+
+h3 {
+  font-size: 1.29454rem; }
+
+h4 {
+  font-size: 1.13778rem; }
+
+h5 {
+  font-size: 1rem; }
+
+h6 {
+  font-size: 0.87891rem; }
+
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p {
+  margin-top: 0.8rem; }
+
+b,
+strong {
+  font-weight: 600; }
+
+blockquote {
+  color: #6c7175;
+  font-family: "Droid Serif", "Times", "Source Serif Pro", serif;
+  font-style: italic;
+  padding: 1.33333rem 0.53333rem 1.33333rem 3.2rem;
+  position: relative; }
+  blockquote:before {
+    display: block;
+    content: "\201C";
+    font-size: 4.41226rem;
+    position: absolute;
+    left: 0;
+    top: -12px;
+    color: rgba(108, 113, 117, 0.5); }
+  blockquote > :nth-child(1) {
+    margin-top: 0; }
+
+ul,
+ol {
+  margin-left: 2rem; }
+  ul > li,
+  ol > li {
+    list-style: inherit;
+    padding: 0 0 0.26667rem 0.26667rem; }
+
+dl dt {
+  color: #262626;
+  font-weight: 600; }
+
+code,
+pre {
+  background-color: #f1f1f1;
+  font-family: monospace; }
+
+pre {
+  margin: 1.6rem 0 0;
+  padding: 1.6rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto; }
+  pre > code {
+    color: #262626;
+    padding: 0; }
+
+code {
+  border-radius: 3px;
+  color: #262626;
+  padding: 0.26667rem 0.53333rem; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #d4d4d4;
+  width: 100%;
+  overflow-x: auto;
+  vertical-align: top;
+  text-align: left;
+  white-space: nowrap; }
+  table th {
+    font-weight: 500;
+    padding: 0.53333rem 1.06667rem; }
+  table tr {
+    border-bottom: 1px solid #d4d4d4; }
+    table tr:nth-child(2n) {
+      background: #f1f1f1; }
+  table td {
+    padding: 0.53333rem 1.06667rem; }
+
+figcaption {
+  clear: both;
+  color: rgba(108, 113, 117, 0.6);
+  font-size: 0.82397rem;
+  margin: 0.8rem 0 0;
+  text-align: center; }
+
+sub,
+sup {
+  font-size: 65%; }
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+
+.btn, [type=button],
+[type=submit],
+button {
+  background: #039be5;
+  border: none;
+  border-radius: 2px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.87891rem;
+  font-weight: 500;
+  line-height: 1.9;
+  padding: 0.53333rem 1.33333rem;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: all .15s ease;
+  -o-transition: all .15s ease;
+  transition: all .15s ease;
+  width: auto; }
+  .btn:hover, [type=button]:hover,
+  [type=submit]:hover,
+  button:hover {
+    background: #262626;
+    color: #ffffff; }
+  .btn:focus, [type=button]:focus,
+  [type=submit]:focus,
+  button:focus {
+    outline: none; }
+  .btn-outline {
+    border: 1px solid #ddd;
+    background: #ffffff;
+    border-radius: 3px;
+    color: #262626; }
+
+[type=button],
+[type=submit],
+button {
+  text-transform: uppercase;
+  -webkit-appearance: none;
+  -moz-appearance: none; }
+
+.navbar {
+  background: #039be5;
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  line-height: 3;
+  max-height: 4rem; }
+  .navbar > div {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    text-align: left;
+    max-width: 700px;
+    margin: 0 auto; }
+  .navbar a {
+    color: #ffffff;
+    text-decoration: none; }
+  .navbar-sidebar-toggle {
+    left: 0;
+    position: relative;
+    text-indent: -99999rem; }
+    .navbar-sidebar-toggle:before {
+      content: "";
+      display: block;
+      border-top: 0.375rem double #ffffff;
+      border-bottom: 0.125rem solid #ffffff;
+      height: 0.125rem;
+      position: absolute;
+      text-indent: 0;
+      top: 50%;
+      width: 1.3rem;
+      -webkit-transform: translate(0px, -50%);
+      -ms-transform: translate(0px, -50%);
+      transform: translate(0px, -50%); }
+
+
+.logo {
+            display: inline-block;
+  font-weight: 600;
+  line-height: 1;
+            margin: 0 auto;
+            height: 2rem;
+            text-indent: -9999px;
+            width: 240px;vertical-align: middle;
+        }
+        .logo.logo-text {
+            line-height: 2;
+            text-align: center;
+            text-indent: 0;
+        }
+
+amp-sidebar {
+  background: #ffffff;
+  width: 240px; }
+  amp-sidebar > ul {
+    margin: 0.8rem 0 0;
+    padding: 0; }
+    amp-sidebar > ul ul {
+      border-left: 1px solid #d4d4d4;
+      margin: 0.53333rem 0 0; }
+    amp-sidebar > ul li {
+      color: #262626;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      list-style: none;
+      line-height: 1.4;
+      padding: 0.42667rem 1.06667rem; }
+      amp-sidebar > ul li li {
+        font-weight: normal;
+        padding: 0.26667rem 0 0.26667rem 1.06667rem; }
+    amp-sidebar > ul a,
+    amp-sidebar > ul a:visited {
+      color: #262626; }
+
+.bg-white {
+  background: #ffffff; }
+
+.wrap-page {
+  max-width: 700px;
+  margin: 0 auto; }
+
+@media all and (max-width: 43.6875em) {
+  .wrap-inner {
+    padding: 0 6%; } }
+
+.page-title {
+  background: #ffffff;
+  -webkit-box-shadow: 0 2px 3px rgba(38, 38, 38, 0.1);
+  box-shadow: 0 2px 3px rgba(38, 38, 38, 0.1);
+  margin-bottom: 0.8rem;
+  padding: 1.6rem 6%; }
+  .page-title > h1 {
+    margin: 0;
+    font-size: 1.29454rem; }
+  .page-title > p {
+    font-size: 0.87891rem;
+    color: #6c7175;
+    line-height: 1.3;
+    margin: 0.26667rem 0 0; }
+  .page-title-author {
+    border-radius: 50%;
+    float: left;
+    height: 2.5rem;
+    width: 2.5rem; }
+    .page-title-author + h1 {
+      margin-left: 3.5rem; }
+      .page-title-author + h1 + p {
+        margin-left: 3.5rem; }
+
+.card {
+  background: #ffffff;
+  -webkit-box-shadow: 0 2px 3px rgba(38, 38, 38, 0.1);
+  box-shadow: 0 2px 3px rgba(38, 38, 38, 0.1);
+  margin-bottom: 0.8rem;
+  padding-bottom: 1.06667rem; }
+
+  .card-meta {
+    border-top: 1px solid #d4d4d4;
+    color: rgba(108, 113, 117, 0.6);
+    font-size: 0.7242rem;
+    font-weight: 500;
+    margin-top: 1.06667rem;
+    padding-top: 1.06667rem;
+    text-transform: uppercase; }
+    .card-meta a + time:before {
+      content: "";
+      background: #d4d4d4;
+      display: inline-block;
+      height: 3px;
+      margin: 0 8px;
+      width: 3px;
+      vertical-align: middle;
+      border-radius: 50%; }
+  .card-text {
+    font-size: 0.9375rem;
+    overflow: hidden;
+    padding: 0 6%; }
+    .card-text h2 {
+      font-size: 1.13778rem; }
+
+.post {
+  margin-bottom: 2.13333rem; }
+  .post-featured-image {
+    margin-top: 0;
+    position: relative; }
+    .post-featured-image > figcaption {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 3px;
+      color: #ffffff;
+      position: absolute;
+      bottom: 0.8rem;
+      padding: 0 0.26667rem;
+      right: 6%; }
+  .post-header {
+    margin-bottom: 2.13333rem; }
+  .post-meta {
+    border-bottom: 1px solid #d4d4d4;
+    color: rgba(108, 113, 117, 0.6);
+    font-size: 0.7242rem;
+    font-weight: 500;
+    margin-top: 1.06667rem;
+    padding-bottom: 1.06667rem;
+    text-transform: uppercase; }
+    .post-meta a + time:before {
+      content: "";
+      background: #d4d4d4;
+      display: inline-block;
+      height: 3px;
+      margin: 0 8px;
+      width: 3px;
+      vertical-align: middle;
+      border-radius: 50%; }
+  .post-tag {
+    margin: 0; }
+    .post-tag > li {
+      display: inline-block;
+      padding: 0; }
+      .post-tag > li a {
+        background: #f1f1f1;
+        border-radius: 2px;
+        color: #6c7175;
+        font-size: 0.77248rem;
+        display: inline-block;
+        margin: 0 0.26667rem 0.26667rem 0;
+        padding: 0.26667rem 0.53333rem; }
+        .post-tag > li a:hover {
+          background: #039be5;
+          color: #ffffff;
+          text-decoration: none; }
+  .post-share {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-top: 1.6rem;
+    width: 100%; }
+    .post-share amp-social-share {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      background-size: 24px; }
+  .post-scroll {
+    color: #ffffff;
+    background: #039be5;
+    bottom: 10px;
+    border-radius: 50%;
+    border: none;
+    -webkit-box-shadow: 0 1px 1.5px 0 rgba(38, 38, 38, 0.12), 0 1px 1px 0 rgba(38, 38, 38, 0.24);
+    box-shadow: 0 1px 1.5px 0 rgba(38, 38, 38, 0.12), 0 1px 1px 0 rgba(38, 38, 38, 0.24);
+    font-size: 1.13778rem;
+    height: 46px;
+    opacity: 0;
+    outline: none;
+    position: fixed;
+    padding: 0;
+    right: 4%;
+    visibility: hidden;
+    width: 46px;
+    z-index: 9999; }
+    .post-scroll-marker {
+      height: 0px;
+      position: absolute;
+      top: 100px;
+      width: 0px; }
+        .post-pagination {
+    background: #f1f1f1;
+    -webkit-box-shadow: inset 0 2px 3px rgba(38, 38, 38, 0.1);
+    box-shadow: inset 0 2px 3px rgba(38, 38, 38, 0.1);
+    border-top: 1px solid #d4d4d4;
+    padding: 1.06667rem 0; }
+    .post-pagination > div {
+      line-height: 1.2;
+      padding: 0.53333rem 1.06667rem;
+      text-align: center; }
+      .post-pagination > div span {
+        display: block;
+        color: #6c7175;
+        font-size: 0.7242rem;
+        font-weight: 500;
+        margin-bottom: 0.26667rem;
+        text-transform: uppercase; }
+    .post-pagination-prev a:before {
+      content: "\2190";
+      margin-right: 0.26667rem; }
+    .post-pagination-next a:after {
+      content: "\2192";
+      margin-left: 0.26667rem; }
+
+aside {
+  margin: 1.6rem 0 0; }
+
+.align-left {
+  text-align: left; }
+
+.align-right {
+  text-align: right; }
+
+.align-center {
+  text-align: center; }
+
+.align-justify {
+  text-align: justify; }
+
+.msg {
+  border-left: 2px solid transparent;
+  padding: 1.06667rem 1.06667rem; }
+  .msg--highlight {
+    background-color: #fff8e6;
+    border-color: #e2ac4f; }
+  .msg--info {
+    background: rgba(45, 97, 201, 0.03);
+    border-color: #039be5; }
+  .msg--success {
+    background: #f7fbf6;
+    border-color: #5ab44b; }
+  .msg--warning {
+    background: #fff3f3;
+    border-color: #c06367;
+    color: #a94442; }
+
+.dropcap:first-letter {
+  float: left;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 2.16943rem;
+  line-height: 0.7;
+  margin-right: 0.53333rem;
+  padding: 0.53333rem 0.53333rem 0.53333rem 0; }
+
+.pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: 0.8rem 0; }
+  .pagination > a {
+    padding-left: 0;
+    padding-right: 0;
+    width: 49%; }
+  .pagination-right {
+    margin-left: auto; }
+
+.bottom {
+  background: #039be5;
+  color: #ffffff;
+  padding: 1.06667rem 4%;
+  text-align: center; }</style><style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript><script async src="https://cdn.ampproject.org/v0.js"></script><script custom-element="amp-animation" src="https://cdn.ampproject.org/v0/amp-animation-0.1.js" async></script><script custom-element="amp-position-observer" src="https://cdn.ampproject.org/v0/amp-position-observer-0.1.js" async></script></head><body class="bg-white"><nav class="navbar wrap-inner" id="top"><div><a on="tap:navbar-sidebar.toggle" class="navbar-sidebar-toggle" title="Menu">Menu</a> <a class="logo logo-text" href="https://devnoff.github.io/amp/">Monospace</a></div></nav><main class="wrap-page"><article class="post"><div class="wrap-inner"><header class="post-header"><h1>SPA 자동 배포 (Git + Jenkins + AWS)</h1><p class="post-meta">by <a href="https://devnoff.github.io/amp/authors/devnoff/" rel="nofollow" title="devnoff">devnoff</a> <time datetime="2019-06-13T15:00">June 13, 2019</time></p></header><p>Git + Jenkins + Docker + S3 + CloudFront 를 이용해 간단한 React.js 기반 SPA를 자동 배포하는 시스템을 만들어 볼 것이다.</p><p>SPA는 static web hosting이 지원되는 어떤 플랫폼에 올려도 동작을 하기 때문에 다양한 배포 환경을 구성할 수 있다. Netlify 와 같이 SPA에 최적화된 CI/CD 및 호스팅을 제공하는 SaaS를 이용하거나, Google Firebase, Amazon S3 + CloudFront(CDN) 등의 static web hosting 이 지원되는 Cloud 기반 서비스를 이용하는 방법이 있는데, 이 글에서는 AWS S3 + CloudFront 방식을 진행 할 것이다.</p><p>AWS S3와 CloudFront 를 같이 사용하는 이유는 S3는 static web hosting 을 그리고 CloudFront 는 AWS Certificate Manager를 통해 생성한 SSL/TLS 무료 인증서를 설정해 HTTPS 환경을 구현할 수 있기 때문이다.</p><p>전체 과정을 요약 하면 다음과 같다.</p><ol><li>React 프로젝트 및 git 저장소 생성<ol><li>webpack 빌드 설정</li></ol></li><li>S3 버킷 및 CloudFront 설정</li><li>빌드 서버 설정<ol><li>Jenkins 설치</li><li>빌드 의존성 설치</li><li>Jenkins 설정<ol><li>빌드 스크립트 작성</li></ol></li></ol></li><li>Github Webhook 과 Jenkins Build Trigger 연결</li></ol><h2>React 프로젝트 및 git 저장소 생성</h2><p>먼저 배포를 할 샘플 SPA 앱을 만든다. <a href="https://www.robinwieruch.de/minimal-react-webpack-babel-setup/">이 곳</a>을 참조하여 만든 boilerplate를 이용해 가장 기본적인 수준의 React.js SPA 개발 환경을 생성한다.</p><p>배포 환경을 고려하여 webpack 설정을 바꾼다. webpack 설정은 <a href="https://webpack.js.org/guides/production">공식 문서</a>를 참조하였다. 기존의 webpack.config.js 파일 하나로 이루어진 설정 파일을 환경에 따라서 다음과 같이 나눈다.</p><ul><li>webpack.common.js</li><li>webpack.prod.js</li><li>webpack.dev.js</li></ul><p>공통적으로 적용되는 부분은 webpack.common.js 로 따로 뺐다. 그리고 webpack.prod.js 와 webpack.dev.js 에서 webpack-merge 를 이용해 공통 설정을 불러와 머지를 지시킨다. 중복된 설정이 줄어들어 코드가 간결하다.</p><p><strong>clean-webpack-plugin</strong> 과 <strong>html-webpack-plugin</strong> 를 <strong>--save-dev</strong> 플래그로 설치한다</p><p>둘의 용도는 다음과 같다.</p><ul><li><strong>HtmlWebpackPlugin</strong> : webpack 빌드를 통해 생성된 bundle 을 로드할 html 파일을 생성 해준다. 파일명에 해시가 포함되어 빌드 시에 매번 파일명이 바뀌는 경우에 유용하다. 플러그인이 생성한 HTML 파일을 사용하거나, 템플릿 로더로 템플릿을 이용할 수 있다.</li><li><strong>CleanWebpackPlugin</strong> : 매 빌드 시 output 디렉토리를 비워준다.</li></ul><p>디버깅을 위한 <strong>inline-source-map</strong> 을 설치한다.</p><p>./dist/index.html 파일을 ./src/assets/index.html 로 이동 시킨 후 webpack.common.js 설정에서 템플릿으로 지정해준다.</p><p>package.json 의 scripts 항목에 start 명령을 변경하고, build 명령을 추가한다.</p><pre><code>{ 
+	"start": "webpack-dev-server --config ./webpack.dev.js",
+	"build" : "webpack --config webpack.prod.js"
+}
+</code></pre><p>dist 디렉토리가 빌드에 의해 동적으로 생성 되는 파일을 담는 목적으로 바뀌었기 때문에 .gitignore 에 dist 를 추가하여 형상관리에서 제외를 시킨다.</p><p>여기 까지 진행된 상태에서 git 에 저장소를 생성하여 소스를 push 한다. 현재 프로젝트 디렉토리가 boilerplate 의 저장소와 연결되어 있으니 우선 .git 디릭토리를 제거하고 git 초기화를 한 뒤 새로 생성한 저장소를 추가한다.</p><pre><code># 저장소 제거
+$ rm -rf .git
+
+# git 초기화
+$ git init
+$ git add .
+$ git commit -m 'Initial commit'
+
+# 새로 생성한 저장소 추가
+$ git remote add origin git@github.com:devnoff/myProject.git
+
+# 푸시
+$ git push origin master
+</code></pre><p>이렇게 git 저장소에 올려진 소스코드는 Jenkins 빌드 설정에 의해 빌드 서버에서 사용되고, 빌드가 요청 되면 git 으로 부터 내려 받아져 빌드 명령에 의해 dependancy 설치 등의 과정을 거치고 빌드가 진행된다.</p><p>위에서 작성된 코드는 다음 주소에서 확인할 수 있다.</p><p>Github : <a href="https://github.com/devnoff/myProject">https://github.com/devnoff/myProject</a></p><h3>S3 버킷 및 CloudFront 설정</h3><p>S3, Cloudfront, ACM, Route53 를 이용해 HTTPS website 호스팅을 하므로써 운영 환경을 구축한다. 방법은 <a href="https://medium.com/@itsmattburgess/hosting-a-https-website-using-aws-s3-and-cloudfront-ee6521df03b9">이 글</a>을 참조</p><p>빌드 서버에서 AWS CLI 를 이용해 S3 에 빌드된 파일을 업로드 하고 CloudFront CDN에 재배포하는 과정은 빌드 스크립트 작성 부분에서 설명하겠다.</p><h2>빌드 서버 설정</h2><h3>Jenkins 설치</h3><p>Jenkins 설정 전 까지 다음의 과정이 선행 되어야 한다.</p><ol><li>EC2 Instance 추가</li><li>NginX 설치, SSL 설정</li><li>Docker 설치 - <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">설치 방법</a></li><li>Dockerized Jenkins 설치 - <a href="https://jybaek.tistory.com/764">설치 방법</a></li><li>빌드 의존성 설치 : 배포할 React.js 앱의 빌드에 필요한 node.js 와 webpack 을 Jenkins 컨테이너에 설치</li></ol><p>결과적으로 필자가 설정한 환경에서 Jenkins 는 맨앞단에 NginX 두고 reverse proxy 설정을 통해 443 포트와 docker 컨테이너의 외부 포트인 8080 을 연결해 주고, docker 컨테이너의 내부 50000 포트를 통해 실행된다.</p><p><strong>443</strong> → <strong>nginx</strong> → <strong>8080</strong> → <strong>Docker</strong> → <strong>50000</strong> → <strong>Jenkins</strong></p><p>Nginx 와 reverse proxy를 사용하는 이유는 HTTPS 를 활성화 하고 내부망과 외부망에 대한 접근 권한의 달리 구성하여 보안을 강화하기 위함이다. <a href="http://mikehadlow.blogspot.com/2013/05/the-benefits-of-reverse-proxy.html">참조</a></p><h3>빌드 의존성 설치</h3><p>개발 환경과 버전을 일치하여 SPA 빌드에 필요한 다음의 의존성을 설치한다. (설치 방법은 생략)</p><ul><li>node.js</li><li>webpack</li></ul><h3>Jenkins 설정</h3><p>새 프로젝트 추가를 추가 한다. item name 으로 workspace 디렉토리가 생성 되는 점에 유의 한다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a008ae95-862a-4891-80d1-fc2d818d25cd/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45EBM2UBFW%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054554Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQDs0mQgGxudqxSwJx7EgI6nQxZ3QAIfktF%2Fpv6b27nSWgIhAPSg2TtOstKeCqxKWAS2KUf3dYAJQ8EUh3ouqZTPNzB1KuMDCM3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMjc0NTY3MTQ5MzcwIgwx8h7%2F7Yu%2B%2BJ5kPnIqtwPoPzPlWPxoeW36EP0t2HxWQbBkPEbyqEV89D%2BeuS1C7ltEoKLRBbOaz2cyXUbZ4tln2rOQKOGgDo68TnedvvebMHmfBAzjbbLh%2BvpEp23objnUklxcJsnUA1%2Bh9MIYzRR1Od9umSnqKQeNOUiDbLtycnI02EYmKVpq4yzYXD7faixYDwG974EOxTjEmE%2Bnzjv2yh%2FD%2FMUq%2Fk9d7%2F3i99yqvlCEVRZWth%2BqbD7MDph7ASBlw6nGwOyl7wwSwirSMZhRBNPQcu%2B8Y3ZNkFCg%2B%2BIR0lCdubm884qfUipeyKkE%2BploXIDycTcYtDv5UWKS%2FpaHFHOIgKwv9kr2bXyJAzxAlpYTvoOv5lXzAKK%2BLwO0U3Ves95jhNRRp0fMtk%2BuLNSxyYcy3afGsRfUO47C7xiGR%2FBb%2B%2F7SBc%2BJZDYJej%2BJT0KPfDOtfk3TKs4pkw%2FPbaRESNlVxyVbpsiGUGvGY6NUzOsh9U%2FAAnL%2B3%2FDXr0XswthSG4nDpgPuSufPmwwHE1Jup0cVtRIjNcwBMhsoAph5nny2aF2mpRgerjnWzbrgmcKA3iJ6OComL6eghbXdeFBxpe8tacabMOOah%2BgFOrMB3sHZA1EAK2g1acriXuEJ8ZKxZkAcF8z3NsCWfBBIVKWunNT9lyZIUZEWWWECUmAzCXlPofAfBe0OzGDdXY8LgQz3YbC8uoryXqYTEILlsk7uw9gXas5cbtu9S0NM6%2Fwqm0u1MKIAL0iZeKWNH%2FzZ9IUyJdIVOkux7V%2BzUouYmoKg5llgMx5Fp6Q7xS0F3ZpjwojcerCpci3MqEe39FINeSt5iUFBrSM5pHRlCyKXl%2BkMjog%3D&amp;X-Amz-Signature=0f2bff039a0aeb9b208e12d96e513f62ecee84558ec639678e1d22b97ad403eb&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" layout="responsive"></amp-img></figure><p>OK를 누르면 프로젝트 설정으로 넘어온다. Github webhook 을 통해 payload 를 받으려면 매개 변수 설정이 필요하다. General 탭에서 다음과 같이 String parameter 매개변수를 추가한다</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/000a7933-ca51-46d0-b0b1-f1591bb3a210/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45HNCD6VIC%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054627Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQC2t29ZbWl7bNHs%2B429m4BC4cv45AlJw6Hwxg1k%2FuhE1wIgUiDRVQKmCXmOpFeYBc1MZe03UEoOASBL%2Bkl6mRlKPygq4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDFBnlX1TA6GyZz0V%2Fyq3A1hEHlW87PIHVIkEBOmBrdRrTbgTpXNLDiNk0Hrg3jahXueYnjWdycXB1c0AsiszeNjc5t3iYLTqzhXRRxF6h5d4RQEEVujJ6xvJo8CflTct7vcsbxoslLz6lns4j0XAitQfcFjSiijN3agXGgUP4nLaW0UqIBIevjaI9uzA0TxYOuoLoYbDTb6tWHrC2vPP6ts8A9wNZUE0Og5mDNjewapz9LzK1n8inZqqG3148ViZhIM3WVEC0myZ2EZvG1b%2FoQaB%2B6JcmLhY%2FPHz6USoGCwQEcTNJ1U%2B0oK4j1ve8GGlOgKFTVoYclB00OvFi%2FZXjAgb7Gm62KUek0pLiKDJ1oNkYFcEafuf1rkT3S7JfZUcGkA8kTO9NvQkhry3IOSRkZrAUm7bud%2BFmUw4t04%2FauTVGCvHOU%2FTq%2FZR4Cv3Vq9Q61qxMURcD6lbgdRy1%2FN7pPxTMjE2YyVeWq4pRn2%2FQ1SsIl1srHw4MiOXDkJh5hAQBeEKvd2TDQFGks2VIMw%2BZNa1aqYeeXofQSoOJ29reuvIkCcDRAM%2BtvG6s25lqvMR8lkda7jvnT9fz8Tr7IfUx2avEzZOtO0w2pyH6AU6tAGWG3ttLKqOKj6DJ9kT2%2BasT8oWmUbyfLVP%2B%2FYhLbQDIiVNIJZeGFHOeb2xzFR8L%2FPywC0tvSFZ0qdtcbDGWPULYOUAQCwdWv8fZFA%2FMLXU18qtUsrExIt6B7cfu11a0JzfEf72dLgYwdCEKvK1NkS9iYsRMGJbPVPrP7TecKjPHhfvPj4II3tYSYVoiEHyElY9cair1mSEazQdSKBZJDXCSyvdsCrEe9gwSzW3Xc8wfR3yssM%3D&amp;X-Amz-Signature=3069c8e5b1a7645f7ba1153274ce37bbecea792a7aef627f0e778dbfee7558e0&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="657" height="322" layout="responsive"></amp-img></figure><p>다음으로 소스 코드 관리 탭으로 이동해서 Git을 선택 후 저장소의 주소를 입력한다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7c730cdd-ec39-48ce-936d-dd3e0cddd812/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45F65M66E2%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054644Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCKrML2vI7vVzhM97Bt5EZf1J66ISCk6%2Bxm2aj5GBRV8gIgIcV7DFb1wLRNLywWfV00UfcaIZQgr8D7qQHaK0Lvkdsq4wMIzv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDL%2Fg8jDrJAzOtOFpcyq3Aw9rNyo2DUdhrs%2FV%2Fa8Mll3mHPOunuZ15zWcgqGAUghVZ6nDwAF%2BDJ8S%2Fcu90QqKW9oaR5v2jf6xPnaVis4meD%2FUSdvYcFwSmyqE7TJ%2BynEXf4H5qtlza1p%2BOGG13CPk5TYOoymtIYWTn8u29AIKP3dRWGrxodp6IXVo%2BP6fRq6SskYuSdibnF8b1lHsMLHKOXTp8m5%2B8X5Hd581uRhPPioKH%2B%2FIJ25yxetSEuZrhKc4oCzhP%2FFUzDHgOGUbkGe%2BO9UzPK7orfwwl5FQ%2BM4aX7gPG9ptt1osS%2BXoWKSTvD56JRls0gOQ9W47vSeJZYwl91NgPqOhDf5wVp4b5u6I%2Fevvx3w4nClUoGaHEQJFvOKqpqaauXMmR%2B9c9kKXrN6PPV9NGNE6%2BMEfiA7%2BVskpb9Tn5gtdguTCweSKbn2z5zNUGkACuVcyPmQPO7YkkRgjui1VlE6lhUIPYmwnq1CCg1VBSy3y16vfTd9appXH%2FolX%2FMdPj0ROpxeOZUab9sHWjmtmKTMLBF7UWGIwEag8kg6yB%2FL4iG6H%2B7Q5cttg7nl1cybnTjmt11wqgBLD%2F6JSX8X6zkHpYrwwvKKH6AU6tAG9HlCfX2mGWP6120rAQzF%2BcNOvCNlXcwIK7iLX%2FiD7kF%2F9Q9B2819vKYNU1GmQzSgIDhcBU4%2B2bJOD%2FGs8bxwqKPfjrlbXRqEc8%2BVmKp%2BVYO%2FpASLSvt2eg0clPLgkKzrim7vWJQURM6NSdlLVcPowfHWzF3vqbK587nWMf9hMSb0pESwyQBuTLvXkGIqJ18e9hEnK672iInctnbmT%2F9vJOYrOHi2YCJop%2FSztFmvxYui91C0%3D&amp;X-Amz-Signature=10235e287fad1dd5dea55f45c696a5b38c45d4ec0b94992e9acc2b8f96091638&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="657" height="332" layout="responsive"></amp-img></figure><p>사전에 Jeknins 컨테이너의 id_rsa 공개키가 github 프로젝트의 Deploy Key 등록하는 과정과 <a href="http://github.com">github.com</a> 의 RSA 를 추가하는 과정이 필요하며, 아래와 같이 저장소 접근 방식을 HTTPS로 바꾸고 github 자격증명 정보를 추가하는 것으로 대체할 수 있다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d885f620-dca8-4623-ba62-c3497d97c89d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45ABTRYJOK%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054735Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQCxeoKyaQJalwwzCpafL%2BXhyBUmtUy6mdJS5MyD0oskeQIhAKZmG2aSw0S9hNWow533VYGC1Lr7Ifgow08UIK6cZbRVKuMDCM3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMjc0NTY3MTQ5MzcwIgxnd2HNoDd6R9hzWLAqtwOC7BR0%2F1f3Ly5UfXFAk8PEDvF5zwGJmYEakAhEwdTTC22yqRjCAW29OrTsaXU5pQjTPbQU5KpgpAHtjR2IS3%2FUc6PLYIYsExzPMoiN%2FYejmElTNEnfH%2FRCuwCbEl%2BOpAp3IjXP4CSYValjI5yzwQ7HptgnaMLYQ0NoIhhrbSG8EI%2FVpWxPrry5uQ2Zw%2BG%2FVHTnAZS8XCebaykmBmoE7sxrZzW91AoinyKb2tZzfOY57V%2BuOtoBCKYY6SZG7KE77xMGs380rmmO48oGzIQ6uWtNNsA0Oid6ES0XO0zra%2B%2FyaXeJLxi0ZCGPlAy8qqiwOZfNrlmWS6N3x3I9a1Lm0oIs9Z8EYIGEcfgKKck9Utvp%2FrpFtuUTe62398ymOsGg72L9qMqSoHTMz6N3rWqMf%2F151QY5W35QfMUMK7ncgQV%2Fk%2BlqfiL6X8rAeTrYeGjCE045VwOZMUN5Bb2cb0P0%2FI3gmnQq2W%2FljXSK6v%2BQFQh2vBSLuNMDFZ08GERjrxhCJxM0tX%2Fh08mAbRjC1VNXymLNTHSp23kJVHbiNLupbpN52oyfhl7eEEXAqDqLbOk78gcdJZrLd6zzMIKRh%2BgFOrMB547%2Feqx9Sv%2FBk2dQtgnDFMsrQR%2Fv0Fj%2F27xASU3oORDADzY39lWfx9JgDpxNH%2Bmmc5M9Ivi0ZUjbqNtjE0liOtusomC%2BjIf9PmYm4%2FIrICgNmKjlbQVidQxYc6X7mZDw2iaZbDYjLtQgmp3NKIueJlTMLHLu5iuiJX3CBAwLjiHjeTQezyT1PPXlffgxEMW4RuR0sVT6MCi4%2B9Y3%2FClM18tvuxTnqOGDgI%2FQQRdcrh1SYPY%3D&amp;X-Amz-Signature=8f189f28c3782847f5b2eeb960255ae902f4be59530bb4bf51b5f38aa71d06b5&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="657" height="458" layout="responsive"></amp-img></figure><p>그리고 자격증명을 위한 인증 정보를 Credentials 항목의 Add 버튼을 눌러 추가한다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/68aeed79-f8c3-4393-ab32-54f5f90b179c/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45ORZRD6E2%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054751Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQC5PGWHN7pdQ%2BYris2olP7O5jV4q6QM%2FDvn2wv2sWb1LgIgRif5U02KZZ%2Bd7uAZpIGORBm24lvn4mWlBpqeEv15u8Iq4wMIzv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDDQSmq5OKSYLtnxakCq3A0l%2Bb%2BXgb4aEEoMhMH%2Bu0t6fZlaa0ZQvp5WcgVZ7Z8yCjrXsm6E917NM96p3gEvFaz%2FW8k%2BSCj7aHe8%2BMb%2FZQQiXM4pagdgdlCBAzUpbI9KdaZ4l032wvqWSaA51bwqmwXh7q2vZaIcD5lj34clpQWcUXOCnqhDi0ENij5%2FXCX%2F1%2Bu1IAskQfUhAgHnl0aR1Ll9iUIXDXI1RNO4P6fFq51ow2HAWeqIkPZgHYt%2FsI5zvx9PLoZZU7vepfJ2tt3t%2B7WLsmvH9KV0TyFRVbKLVrHzuMhsfTVE565D2ygbdCNnJXi03SRKOg3oTg4bSX2KyaFUKkoYoC%2BASQ6JUDoikBzqpSJNabCbupP0G1Hj5oD8DW%2F4g2RJXZA0b8plsD4MsNlPm4qECCuhFEktBqFcouk5W3Gd5cwxV8VeA6stOgimOvnvHL9LbfymkhQBB00hZMY3WZXAxQoxK6P2JnJWESJALstBA2H2DwkxvW7IzDveM1qU3L%2FsrMrqSWTRrdt8msX8NUi2Jg76n7sielWmEhFbwGb1GmQA1XAhm4HaTL2F7inV151NdKED51pmQZrw%2F0NyjykDyTKMwurGH6AU6tAF4v3skS6jduhFzNtRfckyZySRR4Zsr1u%2B8EFAg7zx09W6idnNF10HBvDuJLfBz%2BVsQKrsLGV0IPSDm0bUVtHEwZTYg2tvEPg5LWAw6UvHNEZ%2B%2FbSqQ1JjkXBv9s89wDyctfBkJLjO1fuBr1mddA0o61X7Fw0bNOU%2F58Zh%2BtcEMcp1sVFkzkIIN5vE5fqFm7tuxGh3E%2FcHddkMJ0dP9mNYyCi4xJ1WAskK31y1ZBqwPAN8Z1ow%3D&amp;X-Amz-Signature=7f423af8cd9c293483dff7419c438801c1fc79340b8dd5d94bf0214f807eae21&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="657" height="372" layout="responsive"></amp-img></figure><p>빌드유발(Build Trigger) 탭으로 넘어온다. 여러가지 빌드 유발 옵션이 있는데, 그 중에서 '빌드를 원격으로 유발' 항목을 선택 한다. 이 항목은 Github webhook 과 연동하기 위한 설정으로 다음 챕터인 'Github Webhook 과 Jenkins Build Tigger 연결'에서 관련 부가 설명을 하겠다</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/26a7b38a-54d4-4b6d-a91f-5c2045ca67c6/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45FAJ2HRVB%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054814Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDRIhcN5mlX5FouUlc0r748ZjkXV1h3MV68aLVCfQFhOAIgb1SAbZ6QRJTmH%2BdRK7kGX7CbvHT%2BKMFOxNjprr8XcYAq4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDPdpKHdRXU%2FID1IPNiq3A4C53NlrjTjh3GluR4JZ8ZLHETIaQhc5n465j%2F6d%2BEDYoAUyxRJ9CHa8%2B4QzTTn2Jptc%2FXLOGidFTqn7D%2B1jJFOHJ2g0KnW7rTZ5Sf0uTJOzixfj7HSP%2B58DAsjeq4tWMOcjbH1BbZbgL9CPFqiNOfvgW3fiSWshQ8rcYjX%2BtqwOR7T7aJmPv1%2FRw5VRtDfnzraowWE0iUfIg%2FAAF1DpcG9mj0OWyJqZ1VbsmFeSlxk%2B5QNvXbcV4OfkcUF1p1RtrCJf6WZcemFJpJK6BAb7IfXqwZtx3T0VSj%2FBL1EdwH%2BSqlQPQVgEpvnaxMCCqRJuax3wbD%2FepOhKyRL%2FTVsBbwUrpOHGFygoOX6igsdqdPmkDcM0DLrnikWkgst5gWkFaRoDtXGaMthRHK6a0G2q2wkK3m4ElNjnqdp7H1UWCpUhGhMJEt3LvbTY6F6sHCgIUMaSmCxZ0qzvxUXGhox5vymDFeTw70pUzyGjl3V3JI5AdEnnJr6Oos6VXvD5XQatSVaP6RhzArtNxm%2FCJcSLfZGGg%2FZzXC69Rp5Uva2DE5tKwcnblXn18txVjko91r62JwBKDy7lZCow3o6H6AU6tAEdeuKzK%2FcxRYUj2NSk33TG8j%2FA3q0BRl9Alv%2F%2BvcPMuksy2yHzDSFSyVmtONvpld6cre%2B6eN0XZNV2iovNgAysWQVAtKEXPTIvUPgK7kGFvNH3UzCvztxDIRVwuooKDk2pAE%2BtIVOHPwCjTuMnMxHMf6doj5JI7o%2FYalfPfl1I%2ByYBAmB9%2FZsaclSi%2B8tea8px0CfnQcnYolYnKhJy0pcv6jxW4fTb6HMsiyDzu7gCcCRud3s%3D&amp;X-Amz-Signature=85895d6cdf80a0a94601d45913be19982dc0f79d58ba8778259ac2e55f837512&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="657" height="261" layout="responsive"></amp-img></figure><p>빌드 탭으로 이동 후 'Add build step' 을 눌러서 'Execute Shell'을 선택한다. Shell 명령을 통해 빌드를 진행 할 것이다. 빌드 스크립트를 한줄 한줄씩 작성해본다.</p><figure class="post__image align-center"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6eaba039-0da7-448d-aaf9-d034c465e174/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45M7W4YVBP%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054829Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIAg%2BDlhCDsuaUdJ0hlwxJVi0dASnnU%2B7a8Kr3z7sk9eWAiEArez8kvkw4HkMle7NDg7VhonlhGkPxHJPWq5zEOezuAEq4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDDetiJidJdcYbnYcpyq3A2VTd2GH3LDw0PMA2vH5zqK2%2FJAhG37t8S207TBu%2BJUkKqQJZK5glAQp0I%2BZ%2FD5FVj0jRS4SX5KYrm7IQX%2FRlNAZN9LMVPUtiy1eb%2F7MsE28uF9si3TTeWE08iL7%2F1q6cLxaZARmh2ZSNmOiRbT9slsqTlSGMKegf3w6n2RZ%2F7gVnsF%2FbJxtfaGJqw6A1Q3WOVGrAiJjahYgTXUTfL7uBAgypDJNAFw9M0pRzJpoc1w3fVz8EQ8r5O5YEvMgYHg30WsqCzyzEFnPJBqdzzx3l8dtEpwTS4oWKsGw7CWrwWiT1KabEHx%2FDLtJxSFqKbsPu%2BtlDI6dWWQTMs6POuXPntz14%2FCBKkGDMTrG%2FtuwJtS1CfCprrN9EJ5cEvl7t8GRQFeV1r8nztmeSifVGUjf5biadgfIotxzpseA%2Bfu2d0%2FZT7Sa328LhEHItKvAlgswCdY2U2DYZHpoIertZVRQnBPvPAUF%2BqlQpHcWf8PK6oNL30TZX6Q3ujoGV8Dp4g%2F5PdcSiEYkILWoC8ig13qdJmHoG51zXgmyMr8mL9L4c939K%2BQ8PidE2oQv49ABZJlwYKrguVUkRHowwZuH6AU6tAFOom7MZCYTxCyqkmLKk2PBhGAjsbnvUftM3j7PyHbSk6%2B8ZMEuAmP%2FKLyxmJHgQBKH0qBd46I4NpmEJu9H5E2dMy%2FG2US7GwDnWeHaXjKs8oRYNJ5ivJ9OxJxZy6lvbVbApoz2OBVjKAF9bNBJc7IWzFe%2FiR6pRckX%2B0%2BLv492Te%2F0xEN590O%2BP8JzbkInMizKP65aJa0aoK2hTkX%2F5eTmOsb%2Fjo%2Bwj6PrH4Ho0YIkgyyfdrE%3D&amp;X-Amz-Signature=8e18c34f093ceab6c2ec1575d4f5fe58dfacb461a5b67b95cabe359ffe4e1ba4&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="346" height="308" layout="responsive"></amp-img></figure><p>빌드의 전체 과정은 다음과 같다.</p><ol><li>dependency 설치</li><li>빌드</li><li>s3 버킷 비우기</li><li>s3에 빌드 결과물 업로드</li><li>cloudfront resource 무효화</li></ol><p>우선 package.json 상에 추가/제거된 의존성을 설치하는 명령어를 작성한다. 유의할 점은 아래 보는 바와 같이 실행 파일의 fullpath 를 다 적어주어야 한다.</p><pre><code># Dependency for SPA
+/var/jenkins_home/.nvm/versions/node/v10.16.0/bin/npm install
+</code></pre><p>그리고 webpack 빌드 명령을 작성한다. webpack 빌드 명령은 앞서 npm script로 만들어 둔 것을 이용한다.</p><pre><code># Build
+/var/jenkins_home/.nvm/versions/node/v10.16.0/bin/npm run build
+</code></pre><p>다음으로 배포할 S3 버킷을 비우고 빌드된 파일을 업로드하는 스크립트를 작성한다. (AWS CLI를 사용하기 위해서는 ~/.aws/config 에 자격증명 정보를 넣어 두어야하는데, 이 과정에 대한 설명은 생략한다.)</p><pre><code># Truncate Bucket
+/usr/local/bin/aws s3 rm s3://monospace.kr --recursive
+
+# Upload Build Artifacts
+/usr/local/bin/aws s3 cp /var/jenkins_home/workspace/monospace.kr\\ Test/dist s3://monospace.kr/  --recursive
+</code></pre><p>다음으로 CloudFront 배포 스크립트를 작성한다.</p><p>CloudFront 에 배포 할때 각 지역 엣지에 업데이트 된 소스코드를 반영하는 방법으로 invalidation 을 이용해서 캐시를 갱신 시키거나 default root object 를 변경해서 새로운 버전을 가리키도록 하는 방법이 있다.</p><p>invalidation(무효화) 을 이용하면 빌드 설정이 비교적 단순해 지지만 할당된 무료 캐시 무효화 횟수를 초과하면 과금이 되는 단점이 있고, root object 를 변경하는 방법은 빌드 설정에서 index.html 파일의 이름에 해시 또는 버전 식별자를 추가 하여 생성된 root file (ex. index.a34jgkh454j.html)을 CloudFront 배포 항목의 Default Root Object 이용하도록 해야 하기 때문에 빌드 설정이 다소 복잡 해지지만 별도의 비용이 들지 않는다.</p><p>예제에서는 Invalidation 방법을 이용하였다.</p><pre><code># CloudFront Invalidation
+/usr/local/bin/aws cloudfront create-invalidation --distribution-id E135Y3KFO54CPN \\
+  --paths /index.html
+</code></pre><p>완성된 스크립트는 다음과 같다</p><pre><code># Dependency for SPA
+/var/jenkins_home/.nvm/versions/node/v10.16.0/bin/npm install
+
+# Build 
+/var/jenkins_home/.nvm/versions/node/v10.16.0/bin/npm run build
+
+# Truncate Bucket
+/usr/local/bin/aws s3 rm s3://monospace.kr --recursive
+
+# Upload Build Artifacts
+/usr/local/bin/aws s3 cp /var/jenkins_home/workspace/monospace.kr\\ Test/dist s3://monospace.kr/  --recursive
+
+# CloudFront Invalidation
+/usr/local/bin/aws cloudfront create-invalidation --distribution-id E135Y3KFO54CPN \\
+  --paths /index.html
+</code></pre><h3>Github Webhook 과 Jenkins Build Trigger 연결</h3><p>Jenkins 의 보안을 위해서는 CSRF(cross site request forgery) Protection 옵션을 화성화 해야하는데, 이 설정이 활성화 되어 있으면 github webhook 에서 jenkins 로 빌드 트리거를 실행 시 No valid crumb 에러가 발생한다. CSRF Protection 옵션을 끄더라도 Global Security 설정에서 Anonymous 에 대한 READ 권한이 주어져야 동작을 하게 되는데, 이 경우 외부에서 누구나 jenkins 를 열람할 수 있게 되므로 다른 방법이 필요하다.</p><p><strong>사용자 추가 및 API 토큰 생성</strong></p><p>원격으로 빌드를 실행하기 위한 사용자를 추가하고 사용자의 API 토큰을 이용하면 jenkins의 보안설정을 유지하면서 github webhook 을 받을 수 있다.</p><ol><li>우선 사용자를 추가한다. 이 글에서는 builder 라는 이름을 썼다.<br>a. Jenkins &gt; Jenkins 관리 &gt; Manage Users 로 이동 한다.<br>b. '사용자 생성' 메뉴에서 'builder' 라는 계정명의 사용자를 생성한다.<br><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/13b12edb-bbb5-4d5d-9dc4-a7374bd162d5/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45AJKHXKDT%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T054905Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQC%2BZTqeQRdz58O6JFT7zi1%2B1fFDJz0i%2Bw8BFJ7VrLBDbgIhAOyghmH5qLH5O9Z9doTttm3l9ny45vg1PsKoq4zcKkF8KuMDCM7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMjc0NTY3MTQ5MzcwIgwPNLD6K3Fbw%2BGdRR0qtwM1%2Bo43q6LMIr92jNxjPsjCnDMcp09YEsURNmo0IquvOgqI8TsDQeQVjIVtFKn69HiovzaOOpD0rpvByFzSl5QtWgT4FcLZNw63JkPDsCsrkOgMX29pFtvlKyrkei3tz1lXX7hf4FsNcCOB20CfVCbzhwEgH2l2n79Bycqm%2BcFtIDENfBZIAmfTgzOAsCms91w8nUGFI%2B7neW3%2Fqagr7kHcRf29RJatAO8okO%2FZMKUk9Il0Kv8qeO3d9nPhpC8fkc%2FosvNtLqmKY4jvi5HxahKZ3lgSqZLY0TgaFD2J0xc6WauA6uFHgawbzUnu33pNPcGo%2BDRgGszkkpTNCAgKzozbsqqqMCZuzlj6TBODT9ztaM46U%2FZd0dgBX%2BwedTaLqOsk5Iq4d9qzFMRljFE%2FkIQxZUM3vIcuOKzhaOStAywg9ti8MYErvU5OZQoXZXMW5yOUX8jJ387vk8zezQBVCipiz%2BmFJJnhKBFALPTHwTKcEizwLpwDnJP%2BabFxn0cTSWQAQYPtCg58elRqP0FHO35T1b2goCdwnwlHoAgmftwUT70FnrG4m7Lcc068em564vyqxFIU2i3pMN%2Bhh%2BgFOrMB%2BrY0%2FzBcL1g9gFdPrTRAALxEg2fU%2FSgeam2xpU2bePTH9W2Hn0jIqRGBjugm5n3G6D8N1vB5Cm%2FHI0cBMM4qD248okeHFQzJRcLllqJVGOEZmCBjKkfX5cLTrfPnTuEp6Xjylq8j0NYShfA5PRuynlmqknWghd6BaFrmjXbR3uvs4KHmNfwbiGQfTLznGA%2F17klfUip%2FKwNPvGaW%2ByRH%2B19dG9OwgBKPqwx4s%2FrdskG1Fp8%3D&amp;X-Amz-Signature=faacdf84e2864d32aad23b3bf4b0ca293b2def4e21fa129d04f51af15d24de8a&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="345" height="258" layout="responsive"></amp-img></figure></li></ol><p> </p><ol start="2"><li>그리고 builder 의 권한을 설정한다.<br>a. Jenkins &gt; Jenkins 관리 &gt; Configure Global Security 메뉴로 이동 한다.<br>b. Authorization항목에서 Matrix-based security 선택한다<br>c. 'Add user or group' 버튼을 눌러 아까 생성한 'builder' 를 입력한다<br>d. 'builder'의 권한을 다음과 같이 설정한다<br> &gt; Overall : Read<br> &gt; Job : Workspace, Read, Build<br><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cae86162-ef92-48c2-a314-b64695141b13/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45M3BJYRAQ%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055124Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIFdkPGMcz3iFI70tJdXeawkDPNpI5zFJDhR%2BKJ%2Bet2OTAiAodl3rQmdcFMDxn%2FB%2FpsD8NZZpOberU9wgcMENwgAQrSrjAwjN%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDI3NDU2NzE0OTM3MCIM7me460rpNZPF7%2B4OKrcDen%2BTG%2B7mGmRBIRUFOVCbHll5zacpLawvn%2By9WDE9SmdGIWD0iJsCj%2F0xiSCA2Zv8fwaEywpFLQlX%2FGkD6XtsJFX3vfRqDyKU2qHUouKGkdR6yRC2QdpeTR1R41mUcipkZU82RFe3oLEQBNDZR1Z1jMKlHZ0LKJt1%2BNiRq2srrKZ5ntTGjZIUwnZ432gbltjpNRn44%2FUd357wLNa4TetsPO8EkdujC8Iv95mq1z6Dn1OEsCCr0fPiShtaFzwpG9cTjJ847ra6SBGNIzMQl914csyHNfmy7%2BASLbi77baldYiHn%2BNvUYVGW7koH1pC3IN5izYiNXyb9sO61K2OMDc4HmyGdyIpVNEuw%2BWa%2FTezgWpqGXfs4zKeGcalGxeExSjehmF7OMIyeFurzqXrtvnt%2FxCRNueKeb3yb4TTT1365SioqvAfEI7k%2FC4A5s887Ge34qUgvvKlsOn0tfKUAz9ez9zZHWzbkWqtHw1854ECxHtRgK1Mnc9Rx4TQesOhIjv%2BqNifyBEO8Ee0A6Qi%2BJG9UMmMDJoc%2FOb%2BtXFdK1iWEtIxjWVGUkBXBGjHyWBM%2BFz9OZLBlAVVozDsjYfoBTq1AePU18sihKFHTemixpLCwPBlM42kCccuX5tZfxiSBGGeL%2FRItWepgEEkBwC1bF76KthO7D11y%2FwvHefq3e1UIShdLb9AnlG3hlD5NwCK2WgAV6IpZ4oNHHXCc6V%2FgWCOSL3tZoNryET9hCuPFT6I3YUhwpZ8q5dKvvEhuWq%2B2q8a1o2A%2FL7LvNjFs%2FS8x%2Bzzz9H7e13fu9cXu7vJ4C9tx5SzGp%2FxnoffhCeXcIflDKgUS5rtX2w%3D&amp;X-Amz-Signature=c0d1b3f960452b0203359897bae4ebf2752d3501a4a91aa19fc10a5ce2323799&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="590" height="350" layout="responsive"></amp-img></figure><address>결과적으로 이런 모습이 된다.</address></li></ol><ol start="3"><li>API 토큰 생성<br>a. 로그아웃을 한 뒤 'builder' 계정으로 다시 로그인 한다.<br>b. 대시보드 좌측 '사람' 메뉴에서 'builder'를 선택 후 좌측 '설정'을 눌러 설정 화면으로 이동 한다.<br>c. API Token 항목에서 'Add new Token' 버튼을 눌러서 토큰 이름을 넣고 Generate 버튼으로 토큰을 생성한다.<br><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/228a9be9-5269-4f78-9749-d443845ecd62/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45C6D7RG4F%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055252Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDInBzHejcYecMVOKk%2FmDDYbn54ddpcHzZTG3Qvs9X9ewIgEu7VD6qQZpbv41kg9KoEzII3AzNYVlaOF1rnKH9yeg4q4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDBVg0MGavANE0s0y4Sq3A9IEyqqXFPRQwtPOSsk3%2F1uR5jd11WzUvlmXtOYtxhvgVDoCfDuAeWhMvqBX%2BHGx3%2FmaiikMWKPw0QLA9BVILNbFutxVyJOiYBvL5B5f8qyo3AkKgbnf8k0IM24MK%2BBEcBLil5VDQXgvWhFWYDrGwjk2GhIm%2Fki41zj2wFg2ywFP1zgNDUhiljaWQzEvKqetCDS0Mnx7%2BsbGMrDHZIfdOWmISfcKT4KEOjqMDV0rEQE0ccgTR0%2FXd9UGKOXm%2FU2LinkR3IRkG3%2FAcvA7ls1qPmnaaTZ31u6Scf%2FjjXo9THKhkhZkdA1ctF16yMTMZKT72fhqLH8%2FZWVc3NxESMEBxQh%2BucBkjiEGse3e0ljGdhqbNOCFYYqsBeIRUATLI%2Fs2qEQ6pscuiEXg8ysX5GedjqdHYAtufKi5rPNLg1ach%2F%2F%2FycJGjngdC%2Fb5Sl07kSgG6hFNRmYCpXFSyQsjS2hIKUcH3dMKahYEFhcyiyqmmIQA%2F6tn16eQUMZdPrFinI%2BLgwiyVwm4%2Ffj3%2Fk6K99jOZn9HKE7m7nuMjeNvxFqr3vVo%2FFFZDWwxIQOMZszIBuObFPQFohRmCE8w7IyH6AU6tAEoExp0QxbyV0ZrgftgxSEvOnPK8iZEz%2FEGBsBvvF6adoQwCA6zCvNbk%2BDbeybZJZlVrz%2B5j%2Bs3ZxY4Mwu2IEqD80TcuRBzQlQtXeRUzys%2FgLWE%2FeU1Nj3hXofeiN80RDXTxSq32%2Bb0iZBD3q7WmpG6y8n599%2FIGIOskRnii0cPl%2BMOCQcFF11gspVn64AYyjJHyJa9w%2Fo84rTn3fL9yG2LPplDgtUjWL4yZTn63fzuEnTNqRo%3D&amp;X-Amz-Signature=143f02b21f6ee785b4874934d0741b23194791c87c52f8e4dd11f968b7852505&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="594" height="144" layout="responsive"></amp-img></figure><address>토큰 이름은 아무 것이나 해도 상관없다. 토큰을 사용할 때는 토큰 이름이 아닌 계정명을 함께 사용한다.</address></li></ol><ol start="4"><li>빌드 트리거 설정<br>대시보드에서 프로젝트를 선택하고 '구성' 메뉴로 들어간다. 그리고 '빌드 유발' 항목에서 '빌드를 원격으로 유발'은 이미 선택해 두어서 활성화 되어있다.<br><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/1811494e-a84f-4814-b9ea-ac35cbaa45a4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45KDPO76YI%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055343Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIHWptpaKJ9pQC%2BKQORU1ncBAIlubXrAh%2BtFoWee7WX9UAiBqXbzfkN5DxtD0X5RQwKkRFq0Gq8Pn%2F51ekctGctKahirjAwjN%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDI3NDU2NzE0OTM3MCIMak8ESbAHFsDdTA95KrcDkqLTsoc33zRkwxVAcI%2FcFsr2midjoy23HaG3qDJmSX1x6ok2u%2BA%2BtUuXoplHJozJns0x2wn%2B%2FG9AcT1Wy%2BwbEqBGMv%2FDsAE3e6sz27ZcfpTNn0zcW6d1gLekT6C%2Bv1NROJfybngVUJv5svwn3Ysfbw56T8iWkf3w4a%2B1CM4%2Bwj40Shie24EgJNEajC92ZXX3sbGSxs9suldv2Svw8QFFME7uzxN2eoS1GND5okYu%2FdPo8R6Di%2FhHEBlnwaJk%2Bj0EpLWuMU04tQK4EQl8GZzti8UJ3Y6vdQALmB4qhCC5rAWR39XkRuGlG63Y4VYMfbChS2ax5bMwuaMah%2FMetv5s4ZwbY1Lefcn1gyUB%2FWj8W1PpQ3hNopyGc7Jn933Nsq160Aasm6pzXZbW7cu73RzrvtWkdlXXFsx%2F1EZcmEIBF9SUokgLpEiI7YzOdaezdVDV%2F49TOof5T5iqqlNI4nuxP7VUZ%2Fk%2BcGzrh8dDsdnGK4%2FSBr3p6XgvTbEoICq8pI2f0r7P76VwqkbroLPU6JNl6zgPLSw8sYkeSpS81EkmB%2BGU9LT8Q6mC0kJeNNMAnRPpLJIQxRFRLDCQnIfoBTq1AYX%2FAas7Psk4pyqLRq%2B%2BYMvSP9xL8%2FxlqUowps9oh7mTjAG989cnkcYh%2Ffm5a%2FJWSpK8c3UpCChv0A4rg7gPqNep%2BIMXiSwprrL26PNuzqtKcNha%2FD%2BQvACfO%2FcBLRDrEUvWD2txRuzMQ9oZIYuSIYnOkbQiCSCaONHU8xlEqjYyTGD2uYvKS1b%2Faw6hA2GGdQrdreaDCN3ndGXD9B48YdOdlha%2FUqFjMMHk5Cc3P%2F23IFnl42I%3D&amp;X-Amz-Signature=6abb3b2e4bc1f2605ae468475e64819a188885a2aa06d41105c7ae230a7f12ea&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="601" height="173" layout="responsive"></amp-img></figure></li></ol><p> </p><p>예제 에서는 helloworld 라고 토큰을 입력하였다. 실제 사용 시에는 사람이 읽을 수 없는 해싱된 문자열을 사용하는 것이 좋다. 아래에 예시에서 보는 것 처럼 URL을 통하여 빌드를 유발시킬 수 있다. 필자가 테스트로 구현 중인 jenkins URL을 기준으로 다음과 같이 되겠다.</p><pre><code>&lt;http://ci.monospace.kr/job/monospace.kr%20Test/build?token=helloworld&gt;
+</code></pre><p>하지만 이대로 URL을 호출하면 앞서 언급한 것과 같이 No valid crumb 에러가 뜬다. 이대로는 github webhook payload 설정에 넣을 수 없다.</p><p><strong>생성한 계정과 토큰의 사용</strong></p><p>이제 앞에서 만든 builder 계정과 API 토큰을 이용할 차례다. Jenkins Host 주소 앞에 &lt;account&gt;:&lt;api token&gt;@ 형식으로 인증 정보를 전달하면 정상적으로 빌드가 되는 것을 확인할 수 있다.</p><pre><code>https://builder:114bf74b38dde25c8bc7db803785cdf432@ci.monospace.kr/job/monospace.kr&gt; Test/buildWithParameters?token=helloworld
+</code></pre><p><strong>Github webhook 설정</strong></p><p>Github 프로젝트의 설정 페이지에 Webhooks 메뉴로 들어가서 'Add webhook' 버튼을 눌러 웹훅을 생성 페이지로 이동 한다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/ec777b4d-ca9d-400f-9903-27b1e3a49c7d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45FYL2VKSX%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055455Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIGirPfqydgZ9ASUrhuNssyA%2BJasYZwDk4uY%2Bafx8PzfuAiEA079V3bDjcRi%2BgiZDO2PG0S5Fl6BY5qHd9azoTpPWecYq4wMIzv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDKgJ8TZK9M18d%2Fdzfyq3A%2FS4mEZMUQp3SAN5hlZqXlYgRd53QXfKwgBJ%2BHt4CHPQZmBHy%2BIZNjo8nA2LpXWRtkrFPNBQRGW7B8wXkSMeAfsQpzDEaFjBU7Ce94xExspEHupVtXl4zF6he%2Fq0hIeDhsN0Cnxe6Kf4CVyXq8wu0ZnZk4qWQqTXBZzRQEB1niCSpj00gNi%2Ff9Bu0T2dxxUFClhhtW9CgJ4YJedol936gStSTJ6USANtLr09g6bmDno277iHzk7k%2F2TEDBt5iYwlNfrPEje6SF%2BBBJmdRINyullMwwv%2BcHHbXPofLtv%2FZ3WRcmbXM64A06XTXaj7jKlhgrO2OHXMQe4I3GmVQpF3swNaGKzJyKBflnT9F3iBShuhDQdIXYj6NQBB0RDOSXbOmVF%2B30%2FOYjP%2Bv05dMQDuD6hUmoLpjrmCpQEE603sc1yPOZYUNEvM%2Fwr0%2FZIKnJZl3iJXkEGxCyxk0%2BcTqXxDosvqwaD6eLPO492M3r4GlXQpdMexZ8kr0I1nSIt1bEbMPV9amBr7Ley7BHYdmOVfXJTlrPSzot%2BJcJhcjj2X8uly2FiiZdJx50ayVQ4DliS%2Fp0mEEGY7iFMw%2Fp6H6AU6tAHo2%2F%2FX6dd1Lj2ANMJuQKhjpJ7KwVVfDqaplRKM1WPHwjQitgmS2nSYKMyOxs61b2%2F4PAe3O84scqIFC%2BKPq1e0fsoh9yPHL7BoyPNdNpKdsIH05v%2Bp7XTwXNzOiGX22DZxF3twRMO1%2FCB7%2BUBjsxXxfWDDcYzrZbAaEvtiItpa7cxNJvZO7JnzYB5DEME%2FBVbMqkzX0nift%2Bzq4kffFYnM7TAR2oDlWVCGpKQ%2BTTADAOPBm7U%3D&amp;X-Amz-Signature=156608d7361460ac3c42238e46f910f9352b7c310ef206d9dfb27540792ceb2d&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="636" height="185" layout="responsive"></amp-img></figure><p>앞서 생성한 빌드 트리거를 Payload URL 에 넣는다. 아래에 설정 중에 글에는 다루지 않았지만 필자가 Jenkins를 구동 중인 서버는 NginX에 SSL 인증서를 설치하여 HTTPS 활성화 해두었기 때문에 SSL verification 을 사용하는 것으로 설정 하면 되지만, HTTPS를 지원하지 않는다면 Disabled 로 해두어야 동작한다. (물론 실제 운영 환경이라면 반드시 SSL verification 을 활성화 해야한다.)</p><p>그 아래로 어떤 이벤트로 웹 훅을 유발 시킬 것인가에 대한 설정이 있는데, 상황에 맞게 적절하게 설정하면 되겠다. 여기서는 푸시가 되었을 때 웹훅을 유발 하도록 설정하였다.</p><p>이제 아래 초록색 'Add webhook' 버튼을 눌러 완료한다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/3d530162-956e-44d5-aef4-e6bba1dc4095/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45NCD5YIVP%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055652Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIEbYpM%2BVynFeSNgfvkHqNEBWj1CgvAZdxYZ3owGo8QPsAiASNI8Bdfx7ySPAV6xd69vudwvrp7TzQEDOGSlXUUMrUCrjAwjO%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDI3NDU2NzE0OTM3MCIMgJMCxy6a%2FgWfnvZ0KrcDItzEjovqVXiyeMeW8WzPUgOtmsTBh8xsmpswjPBcj7KSEAaU5X42XNpwbiDsQXvxvfh6w5sqMep1tYcCMgiH0Ue%2BfMV4Eqh1%2BcpN57IWbqfhURVdQCZSuuUTGoG3oHXkfceOhJ859A9b6BayVLMw4TlYdKjVdSn0hIOGYLKcOD%2B8pfEM1E5yQJvOvJW1CFNIv%2FTKOAZK92TuwF8s%2FK6MQebc3qqV7kHNGpHeypv7wmsqcOPinXifS7m%2BrZJRaMnGG8romLqUPKMcCM0lZyruL1ILmQ%2F11HFRnkvaMlb42U6%2B58pcsyFwlvr8hUJF3sDklB%2BeJMdaSSJCOE5J%2FbovYtRf8ZIqItzij2jMT7I6%2BrWegL7g6Z46REncWxp5UNrokKzoSeJbaiRSAflyEY3yBy0NFfM8Poj9Goz73Yvh7aztFuzuQLswP58BVQKf5vcUpllz6mL8%2B5PgyxldyVOHsMFYk%2F8r3wRLve8IUV8o3Bc17GaDlx5c7nkU8q79EiLFqEPxvJvTokBt7DJQl0cxhV%2FcMZhGR3Ox%2BV8NAKT8X5mLleiZ%2Fad%2FjVL5cnAErze%2FRAjwzUOluzDap4foBTq1ARW1ZvlsJJRXx2F9MB5Qhp3gqjn5Q%2F1EBq35KWtI3cHFk93sgiKvS%2FY%2BGsLqIHYXl7tQxju5Db0rzrJSlnUnZD1lpTzWwfZRhHhRE10nVk0tcnAVo1lX6R0cvfuF0GxlUhYtuR2zchdZPMtLS0997lxSenGK9Gk2gEydEWZQoTlQXrALfcXed7izkjLD%2FHVC6Be5BiWQ1b8cvLbXsRHXXR7KwD1cgaA%2F%2Fw%2FW6dQ7VsZTFxsQevk%3D&amp;X-Amz-Signature=ef3ab27110681db28804f27ee731ca8a46fdd502347466dda82535968c796589&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="587" height="600" layout="responsive"></amp-img></figure><p>이제 모든 단계가 완료되었다. 이제 로컬 개발 환경에서 SPA 소스코드를 수정한 뒤 push 를 해보자.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6feb4df1-c79d-4296-93a0-448a90503060/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45KXN3KN6H%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055709Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQD2oHCnd5rL3rpZNQ4X2hjgWX%2B4oPpaJIh5EOjNBlPODAIgDvj9F9tU4UZj5MCRvQI2aBZqqFrOdgqNuDpduofckfkq4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDOnozBCiZqQjWQBAfSq3A9R4cvbVaBn3TKV4feK6dEPXZBR4dTSRCJV7AkYSxOzynsk%2BYF2z%2BXTQlGbJSCX22lPbhHdjfoFtv6LQ5w%2FB%2B%2FaiC7IV2MmyszxXhSMVyLYSD6MMC5kqZAhwDl7VeVEebeFbsrpMCY2OlbVOeL4P9wTBiaGbdh5o1G6qf%2BYJxCiNmOjytKW7NK9d5B2O05zsxY5U%2FXEnWEWrXFvzYfEKgxIqOIndyj3t1fihVogAFFaK%2FMhqQLMQNGmKIqzYfOotn8SqHBs6bwfkVGk%2Bu1KdGfmCTBuMVILp3I93Qw%2FDJmtjE8HIFWS7Ouo4MwKppOTrNyoO%2B%2BEiSE05sAyx3L6H3RlFFgGN6uM984CJD0a5ah5MWp%2FImmgWwjns8jLSdFCLT31NOIB3fm4FOFmcjck8dOA2VpRZWhjG0DWWsgejgXwtHNnREXY7n4I1A5uebrP94wt9s3hB4DlWTAUDbm01lD7ZFjJWNKMcghqPx4mU17Ih0KJQjTdVA3N8HORJJopLPmP0smh6BazodP%2Fq5hzM3qBQRbn0y0VIc%2BnOM8rP8PLwRCXSJ2oHe6mqOaKP2Vob9OMrVHRORQ8w05KH6AU6tAFq25VKPT36iUx9S%2B1MBWFE29FIumZo7xFMDcz25icQ9K0ZDzaKvOv%2FfJQFhUud2%2Fmw9MI3ToxsgJMXVkStUjLMKPuHaU52zHMU6%2BH6NUc8hom4S6lblcTJirDl%2BgGg83flgixyNESJEjW0OEvUYwIzGQbCSEpIujrGU1b0o6T3rRUFDdwNlrEMB2kRSJRqokPAoAFPivAgJT6FD6BPZQcEqgOZ2uCQXMPwMY5HUP9hFtdlpqM%3D&amp;X-Amz-Signature=f1bf9d9342a60bfd3e4628717da0b4996016978e12fba1a6c89e280e359c70f1&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="468" height="210" layout="responsive"></amp-img></figure><p>파일을 수정 하고</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/659e2a99-33ed-434a-a8b9-93e238855e8e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45E7ZB6GNQ%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055727Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDCjbFSBJ0Otud2BuXnH160pkIv8QQD2C%2FR4fL0keI7VAIgf5SJnMTFNyjQaVOeBzCDEB8aLBH9mhnRldttTp4HfZoq4wMIzv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDHI0Klleaw8ysSxLbiq3Aw%2BSL5u2lWC3XMsiAsl1mypqox9pqY%2BhlcYZKegu4UegUeUr%2FXvIcMNPl5g7O9s1R82MS%2B24twiIlD%2FCFYM%2B4o4I6TK00fL6SlgBFTv2XNLI5RqHZCevTHPdUpQnnMtS1pqyXJZHaYPtnMSxN6ixQputyoDeMOs8DQVczVncvTRQhVCISaRSmj6M2BivF4dWRlPAAFma1hnSAQgDzAI66v3jcp3YHegMdKhgVyI4uVwjokHixZMD9oRW0Es1n1ZnDdXlD4oNHLMDEA8cS2KrQR7xj%2ByYY6KWdc%2FB8mrTrcLL%2BWo%2B%2B%2BTIYE9g%2Bxc6BkwxY864pHnEHBPI1AoBSIhBxmvMzLB2IK1XnTtybR5tT%2BhvXdbN5isgnwFeFbhQww%2FcceMBQu3cmC6oQIIZIUxhpkJzGZ980rjpsckPolQZYkniNIJ3gNdDAW949MP5zZ12QDYdXMyBv3aeYogyAnU%2BkvHDVR%2FBjT8ph7kE%2BgABz4cSLxC%2BT9o8uvBJrJEZyU6g4I4Q982Rft%2FM1qiW0LOi2ngtjCS9Cv%2FoU9Nbo1fHztW3Dv1sDnYZ81hq7fcyzGBcsXYfiOQoB04w5J6H6AU6tAHb0yKjVcgAnMIhx2kmLy5jE7mpw46XsLhO%2Bg9UcifoHftz7K9pdts6yFO01W4FdoDIkL%2Fd1imN5HB%2FM9mHvA8m0Se1TPEqrSdeLRMSrX1D38V1SK%2B6imyVChTrK8ruFqrvhB5S%2F%2F%2FQJL8v6OC%2Fibu6ATfLrgOX8H32UqjQz0XIaq7px49iQsUI7I1mNtL%2BluhAgFg7EDokL%2BiV2t3fYooTYX7VRZHqxMx5rVWWDHByc25sSI8%3D&amp;X-Amz-Signature=c5f5364891420b4b1904d6fba3eed42bb960aa0f19ae0ba82af6e18b1c68fa30&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="561" height="358" layout="responsive"></amp-img></figure><p>커밋 후 푸시</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/367dc209-bb15-4054-9cad-f2574e415863/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45M3BJYRAQ%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055745Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIFdkPGMcz3iFI70tJdXeawkDPNpI5zFJDhR%2BKJ%2Bet2OTAiAodl3rQmdcFMDxn%2FB%2FpsD8NZZpOberU9wgcMENwgAQrSrjAwjN%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDI3NDU2NzE0OTM3MCIM7me460rpNZPF7%2B4OKrcDen%2BTG%2B7mGmRBIRUFOVCbHll5zacpLawvn%2By9WDE9SmdGIWD0iJsCj%2F0xiSCA2Zv8fwaEywpFLQlX%2FGkD6XtsJFX3vfRqDyKU2qHUouKGkdR6yRC2QdpeTR1R41mUcipkZU82RFe3oLEQBNDZR1Z1jMKlHZ0LKJt1%2BNiRq2srrKZ5ntTGjZIUwnZ432gbltjpNRn44%2FUd357wLNa4TetsPO8EkdujC8Iv95mq1z6Dn1OEsCCr0fPiShtaFzwpG9cTjJ847ra6SBGNIzMQl914csyHNfmy7%2BASLbi77baldYiHn%2BNvUYVGW7koH1pC3IN5izYiNXyb9sO61K2OMDc4HmyGdyIpVNEuw%2BWa%2FTezgWpqGXfs4zKeGcalGxeExSjehmF7OMIyeFurzqXrtvnt%2FxCRNueKeb3yb4TTT1365SioqvAfEI7k%2FC4A5s887Ge34qUgvvKlsOn0tfKUAz9ez9zZHWzbkWqtHw1854ECxHtRgK1Mnc9Rx4TQesOhIjv%2BqNifyBEO8Ee0A6Qi%2BJG9UMmMDJoc%2FOb%2BtXFdK1iWEtIxjWVGUkBXBGjHyWBM%2BFz9OZLBlAVVozDsjYfoBTq1AePU18sihKFHTemixpLCwPBlM42kCccuX5tZfxiSBGGeL%2FRItWepgEEkBwC1bF76KthO7D11y%2FwvHefq3e1UIShdLb9AnlG3hlD5NwCK2WgAV6IpZ4oNHHXCc6V%2FgWCOSL3tZoNryET9hCuPFT6I3YUhwpZ8q5dKvvEhuWq%2B2q8a1o2A%2FL7LvNjFs%2FS8x%2Bzzz9H7e13fu9cXu7vJ4C9tx5SzGp%2FxnoffhCeXcIflDKgUS5rtX2w%3D&amp;X-Amz-Signature=22c976cdc947b178bb07eda426b94c1bd015c542801a3bc0297f3c4c2841709e&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="628" height="365" layout="responsive"></amp-img></figure><p>Github Webhook 이 정상 실행 되었고</p><figure class="post__image"> <amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/881b2361-9546-4ae5-8d8b-9bb3ebed55b0/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45ISDYGFMX%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055910Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIDPxGXBv%2FFlLEA%2B%2BmLJaWc6e6ZBOKDwUwCAdX4HrP8%2BpAiA3exqMg5z7x%2Fa%2FMJLeGseBjTeSqP0upuN1R%2FWeesF5USrjAwjN%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDI3NDU2NzE0OTM3MCIMDO1jycgSmafEkDAAKrcDkknrkN9ci%2BvXVCamEmcIyElnB7%2BYRoO3L1zbP28wojE7XE0ErR5MqFG3L8%2Ft8Sz%2ByOFRa2enyucioAeCaPJLArTYvv28C7LUUXowIwVG0G%2FpXyMVuliJssHP%2BfJMhHWw2htqMGFM%2F84jSd9OBSvLsNmqlLqQYN313aL%2Bo0TUj%2B0jOstwwrp%2FaUgYvPMpMRLO63CsPkU%2B6234owgM2mNRqF7XJ6XF4KtKNpe244WNIDVFTREsGKZ852ul7gbz5%2BJ0nXVpV14DvgqPs1ny%2BXrEzLe5axPl0xURAdTDlbeRhG3H059QthJqfiqhyt2GpwLyx8%2FeQ7DTPvVEiFr1z6aKPvyJl52vpsdWouJIt3mGtv05Z37YO0ZAfV5dVBN149nKrYkP2bEq%2B1GSbsImwdibpgzb4fP8rKk5yJc95XRmOkTH4CmkBPY%2F5KVE9WNTaSj40fFcIlgKEpTmqvQlpq8%2BTRjoSoUxsJx7TDgjWK%2FYp8n%2BIx5MWEA1cX52k%2B9OyBAFBssIMl9RIhEWN8tncepnwneDvUGiV5YdzjO2AAKrHq3TGaTFJxxCHUpJ16Tgx03%2FOl45%2BGBkOzCdnYfoBTq1AdfvVtmcmmDYyZ1ccPdEgsK6jDTnQxIA%2FAViBM9AgoTYGkTweOcAlyNxtk8%2FqgTCJXJrj8s1Id9d%2BAh0XVQKO6jYGc5Okg9T8RKs15Q3x6Stx1%2FyrAS5%2BTwYHE6qKX2ktoVwPNTQIdX2h4S%2FO7585q92gCfV5y9AbZJ69rOum6yNaItErOHxCD9ElVm5PPb6NDoHSr2l5BPuKnVQ9iEOuSaHMVITg2mITIoz8ayQs45oKkZ%2BUIg%3D&amp;X-Amz-Signature=d7e00a32107b9aadabbcce7146d10f991c9c27dc0f86c18706489608db75f105&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="627" height="351" layout="responsive"></amp-img></figure><p>Jenkins 에서도 빌드가 실행 되었다.</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/408fff78-1ece-4e60-95b5-29276c9a2bc9/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45DH4O4N2G%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055926Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIHidA1%2BuWSeQbNlEUVIeB%2FAwkBpT4Z22BoblLNuVvHKJAiEAg60OrgUCbX%2Buuv6E06vSUx7n2zCvn%2BJim0m0%2Be%2BpYN0q4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDAcZxeeK66TZxtH%2BvCq3A%2FZY5FKUk3hwVmVpU3ZflwZR6Ed1DHPgiFdor2nTOxQkqGta0r%2FtuMSEm9P5FIhR93j5PWZMvrDE%2F%2BTYG5%2F%2FrsJeUPZfwXK0%2BZaE9I0Wgh1r8A9bhJh02eV96exVLUrY%2BrnRvhKIgMmB%2FFRu3M7K31NlVGM83qk8GhhAfrspeRb9PeyqZnmeKhqJkdyQ82pXY86r1M5hQXS8Ke9SCmUw%2FR3aTb6yf6zpfQFWTIKJoADBYCOJOHob37bVb8I41knQZ1AP%2BUDUWHNRxzj%2FooGvXc4y36MtxqLnRm8hSFZzSOA3lbO45DuDBiQMOsW4UtTaVgcNIreg5%2FUQ5DGLNhzHFIlHNfc%2BPw%2Fp6gDIeot5hDG%2FDkCLP0g2ZpJhaRNJ%2FVBkBRoCejup5n8KSjS%2BSUuFPZ7%2FxURPOSEVVCMG5OZNHN3xpY5QWF%2B6O436tpBvdWj9Vm%2F2UQwqeVLDHFWjfmxv8Z2s%2Bh%2B5oku9QpXBPs7eEzDkegyLTUfIiKc6ziSAihS9S%2B7vV3AyRInd4DVGtIAfQcYGFbyBOhUiRExLfoj5n2tzW17Zv1h2fQpmzv8ox5dspCG9v%2Fah%2FVIw946H6AU6tAEualLR3TvJgX%2BIYMyT5ZfpBfZOIuJ8X7WQ8vw550I6c1ss%2FT6Tzqiu9CStaIquqC4083bQECnUZXyOfBqlhzOrxu77BNl58aIsbD%2B3MoTOdD8%2B4sprRcJTLK9qgSA6JMMvAzcaBFdz%2FcKZ9DzSkjpFu6UQHOzvKOvRhwgP%2B6qBnup41SWf9YNcEKpwuAqlA%2F1Oh9m%2Bel1DorNIV%2FNUgadr23Ick5X0fvqWc0oVf6f9MZhS5xU%3D&amp;X-Amz-Signature=04728ed5c328f4b6150f3cb7fc2d0ba5895b9c7ea06a5d97e62d9a332fa33435&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="631" height="407" layout="responsive"></amp-img></figure><p>빌드 넘버로 들어가서 Console Outout 확인</p><figure class="post__image"><amp-img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/280973b5-121e-43ab-8805-327ce1931385/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAT73L2G45OHZN7VNI%2F20190613%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20190613T055941Z&amp;X-Amz-Expires=86400&amp;X-Amz-Security-Token=AgoJb3JpZ2luX2VjEKT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIGa3hOxmd6dQ8oVJuhpR%2BARKW9R35Fnq2a2Xvx6ppx0qAiEAo76Wls8xezfTd1PbHoDecY7u4tMlsvCNlga0mNUEc68q4wMIzf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyNzQ1NjcxNDkzNzAiDB7zzoQNQntspSOspyq3A92xkzpFaVJEBIxc1UnRQfjVGzFoTgLIglKBQNroLNPjSw8PeReVYQl0jweLDUf5T8tkZaWtTtnA8M4z4lqPBgh%2BpI8i15rsELJML%2FRTjmsAiAWg3%2FPWCCnbx%2BPgynCLyOB8hMXLeGy8mNjlc09gbSmFJNdN317ti9QnZqiATMbhhYwBSoisIuW4vpg8XKq2KSP1cRR2aFnyjJ0Vrllw0e4JUpCyhy6zmDXMazOGPgN3YTdC0hzGS3eo7HuPXbcV8ojVa0OBfIodn7poIVSoHV9MSI5mypVU7cobz4RiwamD%2BGFBvuxI6kPHAXaSMrvqLjRej1c40tjqWRlxLafK67YRkamISNA7%2F%2FmqCKLHvjpnjSCb0huAlN%2FUinB%2B77ncXj6XVfbDg5ZPaQKBJyu3R%2FKM%2BwbzaEAcNt%2B6x7u5dOGiMADe7i%2BAIIZNpq6RtA50w%2Fpx3hwj449%2ByMbjp20QzelUbxgZPbyEN9Tl0SP1312ZR99CupW%2B0kp2fI9Caqt4QGe2DyU1Gag8mfJeXgwJSj%2Bk2%2BSdUpaHcqYzfw%2F%2B5uwHRyfygn%2BIxKDduw175c4JMK9hjxvOHdgwl5eH6AU6tAFuNmY1Zb6ImgLxOBB7uil7XvyUGNOj1KN1AZsW0luooFB4INT6e2CHyRaNOnv%2FDz6PrLkGAbyZYAGeM6oz5iG1RC59NQIm%2BnTHSYL5vzD0j7HPXkNc64Lj%2BrMvZdsLFUyMF3MurqIMBI5DbP7dq5xSt%2BUHZPgxaY%2BxQhkAHFFaf6kl9FZmdTwjuVUO8CqAIqCppXaMgbUzeNsZ6I8Z4cEiBsw7Y7cgqvjQK46M3XEY1zP%2BLZw%3D&amp;X-Amz-Signature=48df69220f0466ddeaf3c985508a22efbe1329338715f6e28a86332385e372c7&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%20%3D%22Untitled.png%22" data-is-external-image="true" alt="" width="618" height="266" layout="responsive"></amp-img></figure><p>성공!</p><aside><div class="post-share"><amp-social-share type="system" width="40" height="40" data-param-text="SPA 자동 배포 (Git + Jenkins + AWS)"></amp-social-share><amp-social-share type="facebook" width="40" height="40" data-param-app_id="" data-param-text="SPA 자동 배포 (Git + Jenkins + AWS)" data-param-href="https://devnoff.github.io/amp/spa-jadong-baepo-git-jenkins-aws.html"></amp-social-share><amp-social-share type="twitter" width="40" height="40" data-param-text="SPA 자동 배포 (Git + Jenkins + AWS)" data-param-url="https://devnoff.github.io/amp/spa-jadong-baepo-git-jenkins-aws.html"></amp-social-share><amp-social-share type="pinterest" width="40" height="40" data-param-url="https://devnoff.github.io/amp/spa-jadong-baepo-git-jenkins-aws.html"></amp-social-share><amp-social-share type="tumblr" width="40" height="40" data-param-text="SPA 자동 배포 (Git + Jenkins + AWS)" data-param-url="https://devnoff.github.io/amp/spa-jadong-baepo-git-jenkins-aws.html"></amp-social-share><amp-social-share type="whatsapp" width="40" height="40" data-param-text="SPA 자동 배포 (Git + Jenkins + AWS)"></amp-social-share></div></aside></div></article><nav class="post-pagination wrap-inner"><div class="post-pagination-prev"><span>Previous Post</span> <a href="https://devnoff.github.io/amp/hi.html">Hi</a></div></nav></main><amp-animation id="showAnim" layout="nodisplay"><script type="application/json">{
+                    "duration": "200ms",
+                    "fill": "both",
+                    "iterations": "1",
+                    "direction": "alternate",
+                    "animations": [{
+                        "selector": ".post-scroll",
+                        "keyframes": [{
+                            "opacity": "1",
+                            "visibility": "visible",
+                            "transform": "scale(1)"
+                        }]
+                    }]
+                }</script></amp-animation><amp-animation id="hideAnim" layout="nodisplay"><script type="application/json">{
+                    "duration": "200ms",
+                    "fill": "both",
+                    "iterations": "1",
+                    "direction": "alternate",
+                    "animations": [{
+                        "selector": ".post-scroll",
+                        "keyframes": [{
+                            "opacity": "0",
+                            "visibility": "hidden",
+                            "transform": "scale(0.1)"
+                        }]
+                    }]
+                }</script></amp-animation><div class="post-scroll-marker"><amp-position-observer on="enter:hideAnim.start; exit:showAnim.start" layout="nodisplay"></amp-position-observer></div><button class="post-scroll" on="tap:top.scrollTo(duration=200)">&#8593;</button><footer class="bottom">Powered by Publii</footer><amp-sidebar id="navbar-sidebar" layout="nodisplay"><ul></ul></amp-sidebar></body></html>
