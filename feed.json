@@ -22,34 +22,6 @@
             ],
             "date_published": "2019-06-13T15:00:41+09:00",
             "date_modified": "2019-06-13T15:08:42+09:00"
-        },
-        {
-            "id": "https://devnoff.github.io/hi.html",
-            "url": "https://devnoff.github.io/hi.html",
-            "title": "Hi",
-            "summary": "Halo~~",
-            "content_html": "Halo~~",
-            "author": {
-                "name": "devnoff"
-            },
-            "tags": [
-            ],
-            "date_published": "2019-06-13T14:22:45+09:00",
-            "date_modified": "2019-06-13T14:22:45+09:00"
-        },
-        {
-            "id": "https://devnoff.github.io/test-post.html",
-            "url": "https://devnoff.github.io/test-post.html",
-            "title": "Test Post",
-            "summary": "Hello World!",
-            "content_html": "Hello World!",
-            "author": {
-                "name": "devnoff"
-            },
-            "tags": [
-            ],
-            "date_published": "2019-06-13T13:54:58+09:00",
-            "date_modified": "2019-06-13T14:22:28+09:00"
         }
     ]
 }
