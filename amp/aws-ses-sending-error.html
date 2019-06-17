@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
     <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
     <script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
     <script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
     <script async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></script>
     <script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://devnoff.github.io/amp/aws-ses-sending-error.html"},"headline":"AWS SES Sending Error","datePublished":"2015-05-11T18:45","dateModified":"2019-06-13T23:11","description":"[code language=\"xml\"] &lt;ErrorResponse xmlns=&quot;http://ses.amazonaws.com/doc/2010-12-01/&quot;&gt; &lt;Error&gt; &lt;Type&gt;Sender&lt;/Type&gt; &lt;Code&gt;RequestExpired&lt;/Code&gt; &lt;Message&gt;Request timestamp: Mon, 11 May&hellip;","author":{"@type":"Person","name":"devnoff"},"publisher":{"@type":"Organization","name":"devnoff"}}</script>
@@ -732,6 +733,21 @@ aside {
     </ul>
 </amp-sidebar>
 
+<amp-analytics type="googleanalytics" id="analytics1">
+    <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-142191638-1"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+    </script>
+</amp-analytics>
 
 
 
